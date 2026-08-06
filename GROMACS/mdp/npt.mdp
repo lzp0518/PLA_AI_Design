@@ -1,0 +1,38 @@
+title       = PLA NPT equilibration
+
+define      = -DPOSRES
+
+integrator  = md
+dt          = 0.002
+nsteps      = 250000
+
+nstxout-compressed = 500
+nstenergy  = 500
+nstlog     = 500
+
+continuation = yes
+constraints = h-bonds
+
+cutoff-scheme = Verlet
+
+coulombtype = PME
+rcoulomb    = 1.2
+
+vdwtype = cutoff
+rvdw = 1.2
+
+tcoupl = V-rescale
+tc-grps = Protein Water_and_ions
+tau_t = 0.1 0.1
+ref_t = 300 300
+
+pcoupl = C-rescale
+pcoupltype = isotropic
+tau_p = 2.0
+ref_p = 1.0
+compressibility = 4.5e-5
+refcoord_scaling = com
+
+gen_vel = no
+
+pbc = xyz

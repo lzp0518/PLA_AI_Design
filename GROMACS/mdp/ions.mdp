@@ -1,0 +1,3 @@
+integrator = steep
+nsteps = 500
+emtol = 1000

@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# ESM model
+ESM_GA/esm1v/
+
+# Model weights
+*.pt
+*.pth
+*.bin
+
+# Large sequence files
+*.fasta
+*.fa
+*.aln
+
+# GROMACS results
+GROMACS/results/
+GROMACS/*.xtc
+GROMACS/*.trr
+GROMACS/*.edr
+GROMACS/*.tpr
+GROMACS/*.cpt
+
+# GROMACS temporary files
+GROMACS/#*
+
+# Rosetta outputs
+rosetta/**/log/
+rosetta/**/score/
+rosetta/**/output/
+rosetta/**/*.sc
+rosetta/**/*.log
+rosetta/**/*.png
+
+# temporary
+*.tmp
+
+# GROMACS generated structure files
+GROMACS/*.gro
+GROMACS/*.log
+GROMACS/*.xvg
+GROMACS/vim
+
+
+# Rosetta generated results
+rosetta/relax/result/
+rosetta/relax/rosetta_compare/
+rosetta/relax/input/*.pdb
+
+
+# logs
+*.log
+
+# docking result
+*.pdbqt
+
+# ThermoMPNN results
+MPNN/thermompnn_result/
