@@ -3,6 +3,7 @@ import numpy as np
 import random
 import torch
 from transformers import AutoTokenizer,EsmForMaskedLM
+from pll_rerank import rerank_top300
 import os
 
 SEED=42
@@ -466,7 +467,30 @@ top300.to_csv(
     index=False
 )
 
+# ================= full-sequence PLL reranking =================
+pll_ranked=rerank_top300(
+    top300,
+    wt_seq,
+    tokenizer,
+    model,
+    device,
+    output_path="Top300_ESM_PLL_ranked.csv"
+)
+
 print("\nFinished")
 print("Total candidates:",len(population_history))
 print("Unique variants:",len(all_df))
-print(top300.head())
+print("\nPLL Top10:")
+print(
+    pll_ranked[
+        [
+            "PLL_Rank",
+            "GA_Rank",
+            "Fitness",
+            "ESM_PLL",
+            "Delta_PLL",
+            "Mutations"
+        ]
+    ].head(10)
+)
+print("Saved: Top300_ESM_PLL_ranked.csv")
