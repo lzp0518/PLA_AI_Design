@@ -6,3 +6,4 @@ mk_prepare_ligand.py -i DPPC.sdf -o DPPC.pdbqt
 
 # 对接
 vina --config config.txt --out docking_out.pdbqt
+vina --config config_top1.txt  

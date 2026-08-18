@@ -1,5 +1,5 @@
-receptor = ./top1/PLA_top1.pdbqt
-ligand = ./top1/DPPC_3D.pdbqt
+receptor = ./PLA_top1.pdbqt
+ligand = ../ligand/DPPC_3D.pdbqt
 center_x = 5.645
 center_y = 4.958
 center_z = -1.389

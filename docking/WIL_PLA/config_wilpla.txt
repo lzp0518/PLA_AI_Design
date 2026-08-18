@@ -1,0 +1,9 @@
+receptor = WIL_PLA_pymol.pdbqt
+ligand = ../ligand/DPPC_3D.pdbqt
+center_x = 4.588
+center_y = -9.028
+center_z = -3.229
+size_x = 27.0
+size_y = 26.25
+size_z = 24.0
+out = WIL_PLA_out.pdbqt

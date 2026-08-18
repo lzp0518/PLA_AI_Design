@@ -1,0 +1,9 @@
+receptor = ./chai_PLA_protein_ranked_5_5_GA20.pdbqt
+ligand = ../ligand/DPPC_3D.pdbqt
+center_x = 8.767
+center_y = -9.563
+center_z = -0.692
+size_x = 19.5
+size_y = 24.0
+size_z = 29.25
+out = out5_5_GA20.pdbqt

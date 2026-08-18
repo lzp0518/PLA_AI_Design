@@ -1,0 +1,9 @@
+receptor = ./chai_PLA_protein_ASR78.pdbqt
+ligand = ../ligand/DPPC_3D.pdbqt
+center_x = 3.544
+center_y = 12.76
+center_z = 6.115
+size_x = 24.0
+size_y = 20.25
+size_z = 21.75
+out = out_ASR78.pdbqt

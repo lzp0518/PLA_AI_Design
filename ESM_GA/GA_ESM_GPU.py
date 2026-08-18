@@ -5,6 +5,19 @@ import torch
 from transformers import AutoTokenizer,EsmForMaskedLM
 import os
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+OUTPUT_DIR = os.path.join(
+    SCRIPT_DIR,
+    "01_ESM_GA_20"
+)
+
+os.makedirs(
+    OUTPUT_DIR,
+    exist_ok=True
+)
+
+
 SEED=42
 
 random.seed(SEED)
@@ -23,8 +36,18 @@ if device.type=="cuda":
     torch.backends.cuda.matmul.allow_tf32=True
 
 # ================= load data =================
-pool=pd.read_csv("mutation_pool_all.csv")
-compatibility=np.load("compatibility.npy")
+pool = pd.read_csv(
+    os.path.join(
+        SCRIPT_DIR,
+        "mutation_pool_all.csv"
+    )
+)
+compatibility = np.load(
+    os.path.join(
+        SCRIPT_DIR,
+        "compatibility.npy"
+    )
+)
 positions=pool.Position.values.astype(int)
 wtAA=pool.WT.values
 mutAA=pool.Mut.values
@@ -33,17 +56,32 @@ N=len(pool)
 proxy_min,proxy_max=proxy.min(),proxy.max()
 ESM_MIN,ESM_MAX=-3.0,6.0
 
+
+assert pool["Position"].min() >= 30, (
+    "mutation_pool_all.csv 中仍有前29 aa突变"
+)
+
+assert compatibility.shape == (len(pool), len(pool)), (
+    f"compatibility尺寸{compatibility.shape}"
+    f"与候选池长度{len(pool)}不一致"
+)
+
+
 print("\nProxy statistics")
 print("mean:",proxy.mean())
 print("std:",proxy.std())
 print("min:",proxy_min)
 print("max:",proxy_max)
 
+
 # ================= WT sequence =================
 wt_seq="MFLRREFGAVAALSVLAHAAPAPAPMQRRDISSTVLDNIDLFAQYSAAAYCSSNIESTGTTLTCDVGNCPLVEAAGATTIDEFDDTSSYGDPTGFIAVDPTNELIVLSFRGSSDLSNWIADLNFGLTSVSSICDGCEMHKGFYEAWEVIADTITSKVEAAVSSYPDYTLVFTGHSYGAALAAVAATVLRNAGYTLDLYNFGQPRIGNLALADYITGQNMGSNYRVTHTDDIVPKLPPELLGYHHFSPEYWITSGNDVTVTTSDVTEVVGVDSTAGNDGTLLDSTTAHRWYTIYISECS"
 
 # ================= load ESM1v =================
-model_dir="./esm1v"
+model_dir = os.path.join(
+    SCRIPT_DIR,
+    "esm1v"
+)
 if not os.path.exists(model_dir):
     raise FileNotFoundError(model_dir)
 
@@ -319,9 +357,13 @@ for gen in range(GENERATIONS):
 )
 
     population_df.to_csv(
-        "GA_population_history.csv",
+        os.path.join(
+            OUTPUT_DIR,
+            "GA_population_history.csv"
+        ),
         index=False
-)
+    )
+
     print(f"\nGeneration {gen} BEST: Fitness={best_fit:.4f} Proxy={best_proxy:.3f} ESM={best_esm:.3f}")
 
     best_proxy_norm=(
@@ -356,7 +398,10 @@ for gen in range(GENERATIONS):
     history_df=pd.DataFrame(history)
 
     history_df.to_csv(
-        "GA_history.csv",
+        os.path.join(
+            OUTPUT_DIR,
+            "GA_history.csv"
+        ),
         index=False
     )
 
@@ -373,7 +418,10 @@ for gen in range(GENERATIONS):
     })
 
     pd.DataFrame(generation_top).to_csv(
-        "GA_generation_top.csv",
+        os.path.join(
+            OUTPUT_DIR,
+            "GA_generation_top.csv"
+        ),
         index=False
     )
 
@@ -449,9 +497,11 @@ top300.insert(
     "Rank",
     range(1,len(top300)+1)
 )
-
 top300.to_csv(
-    "Top300_GA_ESM_AllGenerations.csv",
+    os.path.join(
+        OUTPUT_DIR,
+        "Top300_GA_ESM_AllGenerations.csv"
+    ),
     index=False
 )
 
