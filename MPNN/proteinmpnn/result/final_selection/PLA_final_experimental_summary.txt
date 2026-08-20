@@ -1,0 +1,31 @@
+PLA final experimental candidate selection
+==========================================
+WT ProteinMPNN score: 1.50745282
+ProteinMPNN direction: lower is better.
+No weighted composite score was used.
+M30 ProteinMPNN values are compared within group because its generation used ProteinMPNN information.
+Sequence diversity is enforced within each selection class; cross-class distance is reported, not optimized.
+
+[E20]
+PLL_GA_CHAMPION         PLA_E20_A_PLL11_GA12         PLL= 11 GA= 12 MPNN_group=232 score=1.52957392 delta_WT=+0.02212110 within_class_distance=4 whole_group_distance=4
+PLL_GA_CHAMPION         PLA_E20_B_PLL17_GA19         PLL= 17 GA= 19 MPNN_group=201 score=1.52408898 delta_WT=+0.01663616 within_class_distance=4 whole_group_distance=2
+PLL_GA_CHAMPION         PLA_E20_C_PLL36_GA44         PLL= 36 GA= 44 MPNN_group=292 score=1.54344690 delta_WT=+0.03599408 within_class_distance=4 whole_group_distance=4
+THREE_METRIC_BALANCED   PLA_E20_PLL52_GA17           PLL= 52 GA= 17 MPNN_group= 54 score=1.50334422 delta_WT=-0.00410859 within_class_distance=5 whole_group_distance=2
+THREE_METRIC_BALANCED   PLA_E20_PLL73_GA45           PLL= 73 GA= 45 MPNN_group= 17 score=1.49311437 delta_WT=-0.01433845 within_class_distance=5 whole_group_distance=4
+THREE_METRIC_BALANCED   PLA_E20_PLL4_GA78            PLL=  4 GA= 78 MPNN_group= 31 score=1.49763645 delta_WT=-0.00981636 within_class_distance=5 whole_group_distance=5
+
+[E30]
+PLL_GA_CHAMPION         PLA_E30_A_PLL6_GA3           PLL=  6 GA=  3 MPNN_group= 70 score=1.53384623 delta_WT=+0.02639341 within_class_distance=6 whole_group_distance=4
+PLL_GA_CHAMPION         PLA_E30_B_PLL16_GA14         PLL= 16 GA= 14 MPNN_group=249 score=1.56147134 delta_WT=+0.05401853 within_class_distance=6 whole_group_distance=6
+PLL_GA_CHAMPION         PLA_E30_C_PLL10_GA19         PLL= 10 GA= 19 MPNN_group=233 score=1.55733451 delta_WT=+0.04988170 within_class_distance=6 whole_group_distance=6
+THREE_METRIC_BALANCED   PLA_E30_PLL20_GA9            PLL= 20 GA=  9 MPNN_group= 17 score=1.51450345 delta_WT=+0.00705063 within_class_distance=4 whole_group_distance=4
+THREE_METRIC_BALANCED   PLA_E30_PLL15_GA53           PLL= 15 GA= 53 MPNN_group= 47 score=1.52744380 delta_WT=+0.01999098 within_class_distance=4 whole_group_distance=4
+THREE_METRIC_BALANCED   PLA_E30_PLL82_GA2            PLL= 82 GA=  2 MPNN_group= 15 score=1.51418088 delta_WT=+0.00672807 within_class_distance=4 whole_group_distance=4
+
+[M30]
+PLL_GA_CHAMPION         PLA_M30_A_PLL2_GA1           PLL=  2 GA=  1 MPNN_group=112 score=1.44536829 delta_WT=-0.06208453 within_class_distance=4 whole_group_distance=2
+PLL_GA_CHAMPION         PLA_M30_B_PLL18_GA29         PLL= 18 GA= 29 MPNN_group=224 score=1.45884025 delta_WT=-0.04861256 within_class_distance=4 whole_group_distance=4
+PLL_GA_CHAMPION         PLA_M30_C_PLL27_GA48         PLL= 27 GA= 48 MPNN_group=265 score=1.46428661 delta_WT=-0.04316621 within_class_distance=4 whole_group_distance=4
+THREE_METRIC_BALANCED   PLA_M30_PLL24_GA6            PLL= 24 GA=  6 MPNN_group= 46 score=1.43650106 delta_WT=-0.07095176 within_class_distance=4 whole_group_distance=2
+THREE_METRIC_BALANCED   PLA_M30_PLL60_GA5            PLL= 60 GA=  5 MPNN_group= 41 score=1.43551137 delta_WT=-0.07194145 within_class_distance=4 whole_group_distance=4
+THREE_METRIC_BALANCED   PLA_M30_PLL17_GA62           PLL= 17 GA= 62 MPNN_group= 65 score=1.43927841 delta_WT=-0.06817441 within_class_distance=4 whole_group_distance=2
