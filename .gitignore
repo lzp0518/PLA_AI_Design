@@ -17,6 +17,10 @@ ESM_GA/esm1v/
 *.fasta
 *.fa
 *.aln
+!ESM_GA/01_ESM_GA_20/result/*.fasta
+!ESM_GA/02_ESM_GA_30/result/*.fasta
+!ESM_GA/02_ESM_MPNN_GA/result/*.fasta
+!MPNN/proteinmpnn/input/PLA_all_candidates_mature.fasta
 
 # GROMACS results
 GROMACS/results/
@@ -61,3 +65,6 @@ rosetta/relax/input/*.pdb
 
 # ThermoMPNN results
 MPNN/thermompnn_result/
+
+# ProteinMPNN raw score files and logs
+MPNN/proteinmpnn/output/
