@@ -2,9 +2,10 @@
 """Build a final PLA shortlist that preserves two independent selection signals.
 
 The script keeps the existing PLL/GA-selected FASTA candidates as
-``PLL_GA_CHAMPION`` records and adds distinct ``THREE_METRIC_BALANCED`` records
+``PLL_GA_CHAMPION`` records, adds distinct ``THREE_METRIC_BALANCED`` records
 selected from the Pareto front of PLL rank, GA rank, and within-group
-ProteinMPNN rank.  No weighted composite score is used.
+ProteinMPNN rank, and retains selected PLL rank-1 sequences as explicit
+``PLL_TOP1_CONTROL`` records.  No weighted composite score is used.
 """
 
 from __future__ import annotations
@@ -21,6 +22,7 @@ PROJECT_DIR = SCRIPT_DIR.parents[1]
 DEFAULT_RANKED_CSV = SCRIPT_DIR / "result" / "ProteinMPNN_ranked_candidates.csv"
 DEFAULT_OUTPUT_DIR = SCRIPT_DIR / "result" / "final_selection"
 EXPECTED_GROUPS = ("E20", "E30", "M30")
+DEFAULT_PLL_TOP1_GROUPS = ("E20", "E30")
 CHAMPION_DIRS = {
     "E20": PROJECT_DIR / "ESM_GA" / "01_ESM_GA_20" / "result",
     "E30": PROJECT_DIR / "ESM_GA" / "02_ESM_GA_30" / "result",
@@ -70,6 +72,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--balanced-per-group", type=int, default=3)
     parser.add_argument("--max-pll-rank", type=int, default=100)
     parser.add_argument("--max-ga-rank", type=int, default=100)
+    parser.add_argument(
+        "--pll-top1-groups",
+        nargs="*",
+        choices=EXPECTED_GROUPS,
+        default=DEFAULT_PLL_TOP1_GROUPS,
+        help=(
+            "Groups whose PLL rank-1 sequence is retained as a model-specific "
+            "control (default: E20 E30). Pass the flag with no groups to disable."
+        ),
+    )
     parser.add_argument(
         "--min-distance",
         type=int,
@@ -322,6 +334,42 @@ def load_balanced(
     )
 
 
+def load_pll_top1_control(
+    group: str,
+    ranked_rows: dict[str, dict[str, object]],
+    existing: list[dict[str, object]],
+) -> dict[str, object]:
+    matches = [
+        row
+        for row in ranked_rows.values()
+        if row["Group"] == group and int(row["PLL_Rank"]) == 1
+    ]
+    if len(matches) != 1:
+        raise ValueError(
+            f"Expected exactly one PLL rank-1 candidate for {group}; found {len(matches)}"
+        )
+    candidate = matches[0]
+    if candidate["Sequence_ID"] in {row["Sequence_ID"] for row in existing}:
+        raise ValueError(
+            f"PLL rank-1 candidate for {group} is already in another selection class: "
+            f"{candidate['Sequence_ID']}"
+        )
+    row = dict(candidate)
+    row.update(
+        {
+            "Selection_Class": "PLL_TOP1_CONTROL",
+            "Class_Order": 1,
+            "Export_ID": str(candidate["Sequence_ID"]),
+            "Pareto_Optimal_Within_Cutoffs": "",
+            "Selection_Reason": (
+                "Retained as the group PLL rank-1 model-specific control; GA and "
+                "ProteinMPNN metrics are reported but did not determine retention."
+            ),
+        }
+    )
+    return row
+
+
 def add_group_metrics(rows: list[dict[str, object]]) -> None:
     for row in rows:
         ranks = (
@@ -403,7 +451,8 @@ def write_outputs(
         "ProteinMPNN direction: lower is better.",
         "No weighted composite score was used.",
         "M30 ProteinMPNN values are compared within group because its generation used ProteinMPNN information.",
-        "Sequence diversity is enforced within each selection class; cross-class distance is reported, not optimized.",
+        "E20 and E30 PLL rank-1 sequences are retained as model-specific controls.",
+        "Sequence diversity is enforced within multi-candidate selection classes; cross-class distance is reported, not optimized.",
         "",
     ]
     for group in EXPECTED_GROUPS:
@@ -440,6 +489,8 @@ def main() -> None:
             args.min_distance,
         )
         group_rows = [*champions, *balanced]
+        if group in args.pll_top1_groups:
+            group_rows.append(load_pll_top1_control(group, ranked_rows, group_rows))
         add_group_metrics(group_rows)
         final_rows.extend(group_rows)
 
@@ -458,7 +509,7 @@ def main() -> None:
         row["Final_Order"] = final_order
     expected = len(EXPECTED_GROUPS) * (
         args.champions_per_group + args.balanced_per_group
-    )
+    ) + len(args.pll_top1_groups)
     if len(final_rows) != expected:
         raise RuntimeError(f"Selected {len(final_rows)} candidates; expected {expected}")
     if len({row["Sequence_ID"] for row in final_rows}) != len(final_rows):
@@ -472,7 +523,8 @@ def main() -> None:
     )
     print(
         "Selection rule: keep existing PLL/GA champions; add distinct candidates "
-        "using unweighted PLL/GA/within-group-MPNN Pareto balance and diversity."
+        "using unweighted PLL/GA/within-group-MPNN Pareto balance and diversity; "
+        "retain requested PLL rank-1 controls."
     )
     print(f"WT ProteinMPNN score: {float(wt['WT_MPNN_Score']):.8f}")
     for group in EXPECTED_GROUPS:
